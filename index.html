@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Breakout</title>
+  <link rel="stylesheet" href="style.css">
+  <link href='https://fonts.googleapis.com/css?family=VT323' rel='stylesheet' type='text/css'>
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src = "script.js" async></script>
+
+</head>
+<body>
+  <div id="container">
+    <!--GAME UI-->
+    <div id="player1ui">
+      <div class="player1score">
+        P1 SCORE:<span> 00000</span>
+      </div>
+      <div class="player1lives">
+        &hearts; <span>5</span>
+      </div>
+    </div>
+
+    <div id="player2ui">
+      <div class="player2score">
+        P2 SCORE:<span> 00000</span>
+      </div>
+      <div class="player2lives">
+        &hearts; <span>5</span>
+      </div>
+    </div>
+
+    <div id="message">
+      <h2></h2>
+      <p></p>
+    </div>
+
+    <!--GAME OBJECTS-->
+    <div id="gamescreen">
+      <div class="brick player1brick"></div>
+
+      <div class="brick player2brick"></div>
+
+      <div id="paddle" class="player1paddle"></div>
+      <div id="paddle" class="player2paddle"></div>
+
+      <div id="ball"></div>
+    </div>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,94 @@
+/* BODY */
+html, body {
+  font-size: 15px;
+  font-family: "VT323";
+}
+
+#container {
+  background-color: grey;
+  width: 400px;
+  height: 570px;
+  border: 12px solid black;
+  position: relative;
+}
+
+#gamescreen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+#player1ui, #player2ui, #message, #paddle, .brick, #ball, .player1lives, .player2lives, #ball {
+  position: absolute;
+}
+
+/* GAME UI */
+#player1ui, #player2ui {
+  width: 410px;
+  color: pink;
+}
+
+.player1score, .player1lives, .player2score, .player2lives {
+  display: inline-block;
+}
+
+.player1lives {
+  right: 12px;
+}
+
+#player2ui {
+  bottom: 2px;
+}
+
+.player2lives {
+  right: 12px;
+}
+
+#message {
+
+}
+
+/* GAME OBJECTS */
+.brick {
+  width: 30px;
+  height: 10px;
+  left: 50%;
+}
+
+.player1brick {
+  background-color: yellow;
+  top: 50px;
+}
+
+.player2brick {
+  background-color: green;
+  bottom: 50px;
+}
+
+
+#paddle {
+  border-radius: 5px;
+  width: 60px;
+  height: 10px;
+  left: 180px;
+}
+
+.player1paddle {
+  background-color: blue;
+  top: 200px;
+}
+
+.player2paddle {
+  background-color: red;
+  bottom: 200px;
+}
+
+#ball {
+  border-radius: 100%;
+  background-color: white;
+  width: 15px;
+  height: 15px;
+  top: 50%;
+  left: 20px;
+}
+
