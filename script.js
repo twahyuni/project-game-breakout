@@ -17,19 +17,26 @@ $(document).ready(function() {
   var ballMovementX = 5;
   var ballMovementY = 3;
 
-  /*
-  var x = $container / 2;
-  var y = $container / 2;
-  var dx = 2;
-  var dy = 2;
-  */
+  var $menu = $('#menu');
+  var $gamescreenMenu = $('.gamescreenMenu');
 
   //===================================
   // BRICKS
   //===================================
-  var bricks = [];
   var $player1brick = $('.player1brick');
   var $player2brick = $('.player2brick');
+
+  var p1bricks = [
+    [1,1,1,1,1,1],
+    [1,1,1,1,1],
+    [1,1,1,1]
+    ];
+
+  var p2bricks = [];
+  var brickRowCount = 3;
+  var brickColumnCount = 5;
+  var colors = {};
+
 
   /*var brick = {
     brickObj:$('.brick')[0],
@@ -39,7 +46,20 @@ $(document).ready(function() {
     endY:
   }*/
 
-  //generate bricks
+  //generate bricks field
+  //for player1
+  var generateP1Bricks = function() {
+    for (var i=0; c<p1bricks.length; i++) {
+      for (var j=0; r<p1bricks[i].length; j++) {
+        //addnewelement, addclass
+        var $newdiv1 = $('.player1brick');
+        $newdiv1.appendTo(p1bricks[i][j]);
+      }
+    }
+  }
+
+  //for player2
+
 
   //===================================
   // MOVEMENTS
@@ -54,6 +74,19 @@ $(document).ready(function() {
     left: false,
   };
 
+  //add key [SPACE] for menu
+  var keyMenu = function () {
+    $(document).on('keypress', function(e) {
+      var flip = 0;
+      if (e.keyCode == 32) {
+          $menu.toggle();
+          //pause functions TO DO
+          //do something when menu selected TO DO
+      }
+    });
+  }
+
+  //key movements for PLAYER 1's paddle
   var keyMovement1 = function () {
     $(document).on('keydown', function(e) {
       switch (e.keyCode) {
@@ -84,6 +117,7 @@ $(document).ready(function() {
     });
   }
 
+  //key movements for PLAYER 2's paddle
   var keyMovement2 = function () {
     $(document).on('keydown', function(e) {
       switch (e.keyCode) {
@@ -180,17 +214,19 @@ $(document).ready(function() {
 
 
     //collision with paddle
-    //bump with top DEBUG LIST !!!!!
+    //gap vs position1 and position2 DEBUG LIST !!!!!
+    //collision direction if paddle move left or right (if movement == true and hit)
     var position1 = $player1paddle.position();
-    var position1bottom = position1.top + 10;
+    var position1bottom = position1.top + 5;
     var position1right = position1.left + 60;
 
     var position2 = $player2paddle.position();
-    var position2bottom = position2.top + 10;
+    var position2bottom = position2.top + 5;
     var position2right = position2.left + 60;
 
-    if (positionBall.top >= position1.top
-       && positionBall.top <= position1bottom
+
+    if ((positionBall.top + 15) >= position1.top
+       && positionBall.top<= position1bottom
        && positionBall.left >= position1.left
        && positionBall.left <= position1right
       ) {
@@ -198,7 +234,7 @@ $(document).ready(function() {
       ballMovementX = -ballMovementX;
     }
 
-    if (positionBall.top >= position2.top
+    if ((positionBall.top + 15) >= position2.top
        && positionBall.top <= position2bottom
        && positionBall.left >= position2.left
        && positionBall.left <= position2right
@@ -208,14 +244,14 @@ $(document).ready(function() {
     }
 
     //collision with bricks
-    var player1position = $player1brick.position();
-    var player1positionbottom = player1position.top + 10;
-    var player1positionright = player1position.left + 30;
+    var brick1position = $player1brick.position();
+    var brick1positionbottom = brick1position.top + 10;
+    var brick1positionright = brick1position.left + 30;
 
-    if (positionBall.top >= player1position.top
-       && positionBall.top <= player1positionbottom
-       && positionBall.left >= player1position.left
-       && positionBall.left <= player1positionright
+    if (positionBall.top >= brick1position.top
+       && positionBall.top <= brick1positionbottom
+       && positionBall.left >= brick1position.left
+       && positionBall.left <= brick1positionright
       ) {
       ballMovementY = -ballMovementY;
       ballMovementX = -ballMovementX;
@@ -228,14 +264,14 @@ $(document).ready(function() {
       //Number(player2score) ++;
     }
 
-    var player2position = $player2brick.position();
-    var player2positionbottom = player2position.top + 10;
-    var player2positionright = player2position.left + 30;
+    var brick2position = $player2brick.position();
+    var brick2positionbottom = brick2position.top + 10;
+    var brick2positionright = brick2position.left + 30;
 
-    if (positionBall.top >= player2position.top
-       && positionBall.top <= player2positionbottom
-       && positionBall.left >= player2position.left
-       && positionBall.left <= player2positionright
+    if (positionBall.top >= brick2position.top
+       && positionBall.top <= brick2positionbottom
+       && positionBall.left >= brick2position.left
+       && positionBall.left <= brick2positionright
       ) {
       ballMovementY = -ballMovementY;
       ballMovementX = -ballMovementX;
@@ -273,8 +309,11 @@ $(document).ready(function() {
       player2Move();
       moveBall();
     }, 17);
+
     keyMovement1();
     keyMovement2();
+    keyMenu();
+
   };
 
   startGame();

@@ -1,15 +1,18 @@
 /* BODY */
 html, body {
-  font-size: 15px;
+  font-size: 18px;
   font-family: "VT323";
+  color: white;
+  text-shadow: 0 3px 0 rgba(0,0,0,.4);
 }
 
 #container {
-  background-color: grey;
+  background: linear-gradient(#ff0084, #33001b);
   width: 400px;
   height: 570px;
-  border: 12px solid black;
+  border: 12px solid #33001b;
   position: relative;
+  cursor: crosshair;
 }
 
 #gamescreen {
@@ -18,18 +21,18 @@ html, body {
   height: 100%;
 }
 
-#player1ui, #player2ui, #message, #paddle, .brick, #ball, .player1lives, .player2lives, #ball {
+#player1ui, #player2ui, #message, #paddle, .brick, #ball, .player1lives, .player2lives, #ball, #menu {
   position: absolute;
 }
 
 /* GAME UI */
 #player1ui, #player2ui {
   width: 410px;
-  color: pink;
 }
 
 .player1score, .player1lives, .player2score, .player2lives {
   display: inline-block;
+  padding: 5px;
 }
 
 .player1lives {
@@ -44,15 +47,38 @@ html, body {
   right: 12px;
 }
 
-#message {
+#menu {
+  z-index: 2;
+  padding-left: 4%;
+  padding-top: 35%;
+  text-align: center;
+  background-color: rgba(0,0,0,.5);
+  display: none;
+  width: 96%;
+  height: 75.5%;
+}
 
+#menu h2 {
+  letter-spacing: 2px;
+}
+
+#menu h2:hover {
+  -webkit-transform: scale(1.4);
+}
+
+#menu p {
+  padding-top: 100px;
 }
 
 /* GAME OBJECTS */
+.brick, #paddle {
+  box-shadow: 7px 7px 0 rgba(0,0,0,.15);
+}
+
 .brick {
   width: 30px;
   height: 10px;
-  left: 50%;
+  left: 48%;
 }
 
 .player1brick {
@@ -67,19 +93,18 @@ html, body {
 
 
 #paddle {
-  border-radius: 5px;
+  border-radius: 2px;
   width: 60px;
-  height: 10px;
+  height: 5px;
   left: 180px;
+  background-color: white;
 }
 
 .player1paddle {
-  background-color: blue;
   top: 200px;
 }
 
 .player2paddle {
-  background-color: red;
   bottom: 200px;
 }
 
