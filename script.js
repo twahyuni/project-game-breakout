@@ -33,8 +33,6 @@ $(document).ready(function() {
     ];
 
   var p2bricks = [];
-  var brickRowCount = 3;
-  var brickColumnCount = 5;
   var colors = {};
 
 
@@ -52,8 +50,8 @@ $(document).ready(function() {
     for (var i=0; c<p1bricks.length; i++) {
       for (var j=0; r<p1bricks[i].length; j++) {
         //addnewelement, addclass
-        var $newdiv1 = $('.player1brick');
-        $newdiv1.appendTo(p1bricks[i][j]);
+        var $newdiv1 = $player1brick.createElement( "div" ).setAttribute('class','.player1brick');
+        document.body.appendChild($newdiv1);
       }
     }
   }
@@ -79,9 +77,9 @@ $(document).ready(function() {
     $(document).on('keypress', function(e) {
       var flip = 0;
       if (e.keyCode == 32) {
-          $menu.toggle();
-          //pause functions TO DO
-          //do something when menu selected TO DO
+        $menu.toggle();
+        //pause functions TO DO
+        //do something when menu selected TO DO
       }
     });
   }
@@ -260,8 +258,11 @@ $(document).ready(function() {
       $('.brick.player1brick').remove();
 
       //add score to player 2
-      //var player2score = $('.player2score span').val();
-      //Number(player2score) ++;
+      var player2score = $('.player2score span').val();
+      var p2score = Number(player2score);
+      p2score ++;
+      console.log(p2score);
+      $('.player2score span').text("0000" + p2score).slice(-4);
     }
 
     var brick2position = $player2brick.position();
@@ -280,9 +281,11 @@ $(document).ready(function() {
       $('.brick.player2brick').remove();
 
       //add score to player 1
-      //var player1score = $('.player1score span').val();
-      //Number(player1score) ++;
-
+      var player1score = $('.player1score span').val();
+      var p1score = Number(player1score);
+      p1score ++;
+      console.log(p1score);
+      $('.player1score span').text("0000" + p1score).slice(-4);
     }
 
   }
