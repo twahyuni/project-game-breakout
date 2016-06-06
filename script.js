@@ -17,17 +17,19 @@ $(document).ready(function() {
   var ballMovementX = 5;
   var ballMovementY = 3;
 
+  /*
   var x = $container / 2;
   var y = $container / 2;
   var dx = 2;
   var dy = 2;
+  */
 
   //===================================
   // BRICKS
   //===================================
   var bricks = [];
-  var player1brick = $('.player1brick');
-  var player2brick = $('.player2brick');
+  var $player1brick = $('.player1brick');
+  var $player2brick = $('.player2brick');
 
   /*var brick = {
     brickObj:$('.brick')[0],
@@ -175,7 +177,6 @@ $(document).ready(function() {
 
 
     //collision with paddle
-
     var position1 = $player1paddle.position();
     var position1bottom = position1.top + 10;
     var position1right = position1.left + 60;
@@ -203,8 +204,36 @@ $(document).ready(function() {
     }
 
     //collision with bricks
+    var player1position = $player1brick.position();
+    var player1positionbottom = player1position.top + 10;
+    var player1positionright = player1position.left + 30;
+
+    if (positionBall.top >= player1position.top
+       && positionBall.top <= player1positionbottom
+       && positionBall.left >= player1position.left
+       && positionBall.left <= player1positionright
+      ) {
+      ballMovementY = -ballMovementY;
+      ballMovementX = -ballMovementX;
+      $('.brick.player1brick').remove();
+    }
+
+    var player2position = $player2brick.position();
+    var player2positionbottom = player2position.top + 10;
+    var player2positionright = player2position.left + 30;
+
+    if (positionBall.top >= player2position.top
+       && positionBall.top <= player2positionbottom
+       && positionBall.left >= player2position.left
+       && positionBall.left <= player2positionright
+      ) {
+      ballMovementY = -ballMovementY;
+      ballMovementX = -ballMovementX;
+      $('.brick.player2brick').remove();
+    }
 
   }
+
 
   //===================================
   // SCORE
