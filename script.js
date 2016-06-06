@@ -39,6 +39,8 @@ $(document).ready(function() {
     endY:
   }*/
 
+  //generate bricks
+
   //===================================
   // MOVEMENTS
   //===================================
@@ -167,6 +169,7 @@ $(document).ready(function() {
     var positionBall = $ball.position();
 
     //collision with sides: left, right, top, bottom
+    //gap vs ballmovement DEBUG LIST !!!!!
     if (positionBall.left == 0 || positionBall.left == 385) {
       ballMovementX = -ballMovementX;
     }
@@ -177,6 +180,7 @@ $(document).ready(function() {
 
 
     //collision with paddle
+    //bump with top DEBUG LIST !!!!!
     var position1 = $player1paddle.position();
     var position1bottom = position1.top + 10;
     var position1right = position1.left + 60;
@@ -215,7 +219,13 @@ $(document).ready(function() {
       ) {
       ballMovementY = -ballMovementY;
       ballMovementX = -ballMovementX;
+
+      //remove player 1 brick
       $('.brick.player1brick').remove();
+
+      //add score to player 2
+      //var player2score = $('.player2score span').val();
+      //Number(player2score) ++;
     }
 
     var player2position = $player2brick.position();
@@ -229,7 +239,14 @@ $(document).ready(function() {
       ) {
       ballMovementY = -ballMovementY;
       ballMovementX = -ballMovementX;
+
+      //remove player 2 brick
       $('.brick.player2brick').remove();
+
+      //add score to player 1
+      //var player1score = $('.player1score span').val();
+      //Number(player1score) ++;
+
     }
 
   }
