@@ -21,7 +21,7 @@ html, body {
   height: 100%;
 }
 
-#player1ui, #player2ui, #message, #paddle, #ball, .player1lives, .player2lives, #ball, #menu, .player1brick, .player2brick {
+#player1ui, #player2ui, #message, #paddle, #ball, .player1lives, .player2lives, #ball, #menu, .player1brick, .player2brick, #startMenu {
   position: absolute;
 }
 
@@ -56,6 +56,17 @@ html, body {
   display: none;
   width: 96%;
   height: 75.5%;
+}
+
+#startMenu {
+  z-index: 1;
+  padding-left: 4%;
+  padding-top: 50%;
+  background-color: rgba(0,0,0,.5);
+  text-align: center;
+  width: 96%;
+  height: 65.5%;
+  display: none;
 }
 
 #menu h2 {

@@ -23,6 +23,7 @@ $(document).ready(function() {
   var $containerPosition  = $('#container').position();
   var $menu               = $('#menu');
   var $gamescreenMenu     = $('.gamescreenMenu');
+  var $startMenu          = $('#startMenu');
   var gamescreenOrigin    = 0;
   var gamescreenWidth     = 400;
   var gamescreenHeight    = 570;
@@ -52,6 +53,8 @@ $(document).ready(function() {
   var $player2brick       = $('.player2brick');
   var brickHeight         = 10;
   var brickWidth          = 30;
+  var brickOffsetLeft     = 5;
+  var brickOffsetTop      = 5;
 
   //===================================
   // BRICKS
@@ -77,24 +80,27 @@ $(document).ready(function() {
   //generate bricks field
   //for player1
 
-  //add one brick
+  /*add one brick
   var createP1Brick = function() {
     var newBrick = '<div class="player1brick">';
-
     $(newBrick).appendTo($('.p1BricksArea'));
-    $player1brick.offset({left: 50});//position?
-  }
+  }*/
 
-  /*
+
   var generateP1Bricks = function() {
-    for (var i=0; c<p1bricks.length; i++) {
-      for (var j=0; r<p1bricks[i].length; j++) {
+    for (var i=0; i<p1bricks.length; i++) {
+      for (var j=0; j<p1bricks[i].length; j++) {
         //addnewelement, addclass
-        var $newdiv1 = $player1brick.createElement( "div" ).setAttribute('class','.player1brick');
-        document.body.appendChild($newdiv1);
+        var newBrick = '<div class="player1brick">';
+        $(newBrick).appendTo($('.p1BricksArea'));
+
+        var brickX = (i*(brickWidth+brickPadding)) + brickOffsetLeft;
+        var brickY = (j*(brickHeight+brickPadding)) + brickOffsetTop;
+
+        $player1brick.css({top: brickX, left:brickY});
       }
     }
-  }*/
+  }
 
   //for player2
 
@@ -323,7 +329,7 @@ $(document).ready(function() {
       if (e.keyCode == 32) {
         $menu.toggle();
 
-        //pause functions TO DO
+        //pause functions TO DO: stop propagation?
 
         $('#continue').on('click', resumeGame);
         $('#newGame').on('click', resetGame);
@@ -334,11 +340,10 @@ $(document).ready(function() {
 
   //resume
   var resumeGame = function() {
-
+     $menu.hide();
   };
 
   //game over
-  //menu ask for play again? or quit
   var gameOver = function() {
 
   };
@@ -350,13 +355,15 @@ $(document).ready(function() {
 
   //start menu
   var startMenu = function() {
-
+      $menu.hide();
+      $startMenu.show();
+      $('#play').on('click', function() {
+        startGame(); //make only one start game run?
+        $startMenu.hide();
+      });
   };
 
-
-  //===================================
-  // RUN GAME
-  //===================================
+  //start game
   var startGame = function() {
     gameloop = setInterval(function(){
       player1Move();
@@ -370,6 +377,7 @@ $(document).ready(function() {
 
   };
 
-  startGame();
+  //run
+  startMenu();
 
 });
