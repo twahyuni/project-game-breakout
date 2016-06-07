@@ -1,4 +1,13 @@
 /*
+Q1: why when take out position1 or 2 outside function, it doesn't work
+Q2: how to take one element value? $player1brick[0].position(); doesn't work
+
+TO DO LIST (BY ORDER)
+Generate Bricks
+Game States
+Fix Bugs: Gap vs movement
+Refactor
+Add Sounds
 
 */
 
@@ -71,6 +80,7 @@ $(document).ready(function() {
   //add one brick
   var createP1Brick = function() {
     var newBrick = '<div class="player1brick">';
+
     $(newBrick).appendTo($('.p1BricksArea'));
     $player1brick.offset({left: 50});//position?
   }
@@ -88,22 +98,9 @@ $(document).ready(function() {
 
   //for player2
 
-
   //===================================
   // MOVEMENTS
   //===================================
-
-  //add key [SPACE] for menu
-  var keyMenu = function () {
-    $(document).on('keypress', function(e) {
-      var flip = 0;
-      if (e.keyCode == 32) {
-        $menu.toggle();
-        //pause functions TO DO
-        //do something when menu selected TO DO
-      }
-    });
-  }
 
   //key movements for PLAYER 1's paddle
   var keyMovement1 = function () {
@@ -312,11 +309,31 @@ $(document).ready(function() {
 
 
   //===================================
-  // GAME STATE
+  // GAME STATES
   //===================================
   //winner
   //if playerXBricksArea is empty, playerY wins and go to game over
   var winner = function() {
+
+  };
+
+  //access menu through [SPACE]
+  var keyMenu = function () {
+    $(document).on('keypress', function(e) {
+      if (e.keyCode == 32) {
+        $menu.toggle();
+
+        //pause functions TO DO
+
+        $('#continue').on('click', resumeGame);
+        $('#newGame').on('click', resetGame);
+        $('#quit').on('click', startMenu);
+      }
+    });
+  }
+
+  //resume
+  var resumeGame = function() {
 
   };
 
