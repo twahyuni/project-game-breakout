@@ -78,7 +78,8 @@ html, body {
 .brick {
   width: 30px;
   height: 10px;
-  left: 48%;
+  left: 20%;
+
 }
 
 .player1brick {
@@ -90,7 +91,6 @@ html, body {
   background-color: green;
   bottom: 50px;
 }
-
 
 #paddle {
   border-radius: 2px;

@@ -36,16 +36,25 @@ $(document).ready(function() {
   var colors = {};
 
 
-  /*var brick = {
-    brickObj:$('.brick')[0],
-    x: brickObj.left,
-    y:brickObj.top,
-    endX:,
-    endY:
+  /*var p1brick = {
+    brickObj:$player1brick[0],
+    x: brickObj.position().left,
+    y: brickObj.position().top
+    endX: brickObj.position().left + 30;
+    endY: brickObj.position().top + 10;
   }*/
 
   //generate bricks field
   //for player1
+
+  //add one brick
+  var createP1Brick = function() {
+    var newBrick = '<div class="brick player1brick">';
+    $(newBrick).appendTo($('.p1BricksArea'));
+    //position?
+  }
+
+  /*
   var generateP1Bricks = function() {
     for (var i=0; c<p1bricks.length; i++) {
       for (var j=0; r<p1bricks[i].length; j++) {
@@ -54,7 +63,7 @@ $(document).ready(function() {
         document.body.appendChild($newdiv1);
       }
     }
-  }
+  }*/
 
   //for player2
 
@@ -292,13 +301,13 @@ $(document).ready(function() {
 
 
   //===================================
-  // SCORE
+  // GAME STATE
   //===================================
+  //winner
 
+  //game over
 
-  //===================================
-  // RESET
-  //===================================
+  //reset game
 
 
   //===================================
