@@ -1,6 +1,5 @@
 /*
 Q1: why when take out position1 or 2 outside function, it doesn't work
-Q2: how to take one element value? $player1brick[0].position(); doesn't work
 
 TO DO LIST (BY ORDER)
 Generate Bricks
@@ -55,7 +54,8 @@ $(document).ready(function() {
   var brickHeight         = 10;
   var brickWidth          = 30;
   var brickOffsetLeft     = 10;
-  var brickOffsetTop      = 15;
+  var brickOffsetTop1     = 15;
+  var brickOffsetTop2     = 245;
   var bricksRow           = 3;
   var bricksColumn        = 9;
 
@@ -63,9 +63,9 @@ $(document).ready(function() {
   // BRICKS
   //===================================
   var p1bricks = [
-    [1,1,1,1,1,1,1,1,1],
-    [1,1,1,1,1,1,1,1,1],
-    [0,1,1,1,0,1,1,1,0]
+    [1,1,1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1,1,1]
     ];
 
   var p2bricks = [];
@@ -97,7 +97,7 @@ $(document).ready(function() {
         var newBrick = '<div class="player1brick">';
 
         var brickX = (j*(brickWidth + brickOffsetLeft));
-        var brickY = (i*(brickHeight + brickOffsetTop));
+        var brickY = (i*(brickHeight + brickOffsetTop1));
 
         $('.player1brick:eq('+ j +')').css({top: brickY, left:brickX});
 
@@ -108,6 +108,23 @@ $(document).ready(function() {
   }
 
   //for player2
+
+  /*var generateP2Bricks = function() {
+    for (var i=1; i<bricksRow; i++) {
+      for (var j=1; j<bricksColumn; j++) {
+        //addnewelement, addclass
+        var newBrick = '<div class="player2brick">';
+
+        var brickX = (j*(brickWidth + brickOffsetLeft));
+        var brickY = (i*(brickHeight + brickOffsetTop2));
+
+        $('.player2brick:eq('+ j +')').css({top: brickY, left:brickX});
+
+        $(newBrick).appendTo($('.p1BricksArea'));
+
+      }
+    }
+  }*/
 
   //===================================
   // MOVEMENTS
@@ -397,6 +414,7 @@ $(document).ready(function() {
     keyMovement2();
     keyMenu();
     generateP1Bricks();
+    generateP2Bricks();
 
   };
 
