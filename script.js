@@ -47,27 +47,29 @@ $(document).ready(function() {
   var ballMovementY       = 3;
   var ballLimitX          = gamescreenWidth - ballSize;
   var ballLimitY          = gamescreenHeight - ballSize;
+  var accelSpeed          = 2;
 
   //bricks
   var $player1brick       = $('.player1brick');
   var $player2brick       = $('.player2brick');
   var brickHeight         = 10;
   var brickWidth          = 30;
-  var brickOffsetLeft     = 5;
-  var brickOffsetTop      = 5;
+  var brickOffsetLeft     = 10;
+  var brickOffsetTop      = 15;
+  var bricksRow           = 3;
+  var bricksColumn        = 9;
 
   //===================================
   // BRICKS
   //===================================
   var p1bricks = [
-    [1,1,1,1,1,1],
-    [1,1,1,1,1],
-    [1,1,1,1]
+    [1,1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1,1],
+    [0,1,1,1,0,1,1,1,0]
     ];
 
   var p2bricks = [];
   var colors = {};
-
 
   /*var p1brick = {
     brickObj:$player1brick[0],
@@ -84,20 +86,23 @@ $(document).ready(function() {
   var createP1Brick = function() {
     var newBrick = '<div class="player1brick">';
     $(newBrick).appendTo($('.p1BricksArea'));
+
   }*/
 
 
   var generateP1Bricks = function() {
-    for (var i=0; i<p1bricks.length; i++) {
-      for (var j=0; j<p1bricks[i].length; j++) {
+    for (var i=1; i<bricksRow; i++) {
+      for (var j=1; j<bricksColumn; j++) {
         //addnewelement, addclass
         var newBrick = '<div class="player1brick">';
+
+        var brickX = (j*(brickWidth + brickOffsetLeft));
+        var brickY = (i*(brickHeight + brickOffsetTop));
+
+        $('.player1brick:eq('+ j +')').css({top: brickY, left:brickX});
+
         $(newBrick).appendTo($('.p1BricksArea'));
 
-        var brickX = (i*(brickWidth+brickPadding)) + brickOffsetLeft;
-        var brickY = (j*(brickHeight+brickPadding)) + brickOffsetTop;
-
-        $player1brick.css({top: brickX, left:brickY});
       }
     }
   }
@@ -236,7 +241,6 @@ $(document).ready(function() {
 
     //collision with paddle
     //gap vs position1 and position2 DEBUG LIST !!!!!
-    //collision direction if paddle move left or right (if movement == true and hit)
     var position1 = $player1paddle.position();
     var position1bottom = position1.top + playerPaddleHeight;
     var position1right = position1.left + playerPaddleWidth;
@@ -264,8 +268,25 @@ $(document).ready(function() {
       ballMovementX = -ballMovementX;
     }
 
+    //Change Acceleration while paddle moving
+    //collision direction if paddle move left or right (if movement == true and hit)
+    var changeAcceleration = function () {
+      if (movement1.left) {
+        ballMovementY = -(Math.abs(accelSpeed+ballMovementY));
+      }
+      if (movement1.right) {
+
+      }
+      if (movement2.left) {
+
+      }
+      if (movement2.right) {
+
+      }
+    };
+
     //collision with bricks
-    var brick1position = $player1brick.position();
+    /*var brick1position = $player1brick.position();
     var brick1positionbottom = brick1position.top + brickHeight;
     var brick1positionright = brick1position.left + brickWidth;
 
@@ -309,7 +330,7 @@ $(document).ready(function() {
       p1score ++;
       console.log(p1score);
       $('.player1score span').text("0000" + p1score).slice(-4);
-    }
+    }*/
 
   }
 
@@ -327,6 +348,7 @@ $(document).ready(function() {
   var keyMenu = function () {
     $(document).on('keypress', function(e) {
       if (e.keyCode == 32) {
+        $startMenu.hide();
         $menu.toggle();
 
         //pause functions TO DO: stop propagation?
@@ -357,7 +379,7 @@ $(document).ready(function() {
   var startMenu = function() {
       $menu.hide();
       $startMenu.show();
-      $('#play').on('click', function() {
+      $startMenu.on('click', function() {
         startGame(); //make only one start game run?
         $startMenu.hide();
       });
@@ -374,6 +396,7 @@ $(document).ready(function() {
     keyMovement1();
     keyMovement2();
     keyMenu();
+    generateP1Bricks();
 
   };
 

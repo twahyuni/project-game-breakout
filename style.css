@@ -89,9 +89,7 @@ html, body {
 .player1brick {
   width: 30px;
   height: 10px;
-  left: 20%;
   background-color: yellow;
-  top: 50px;
 }
 
 .player2brick {
