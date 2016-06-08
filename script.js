@@ -1,9 +1,5 @@
 /*
-Q1: why when take out position1 or 2 outside function, it doesn't work
-
 TO DO LIST (BY ORDER)
-Generate SECOND Bricks
-Game States
 Accelerator
 Refactor
 Add Sounds
@@ -39,32 +35,29 @@ $(document).ready(function() {
   var paddleMovement      = 10;
   var movement1           = {right: false, left: false};
   var movement2           = {right: false, left: false};
-  var $player1Text         = $('.player1score span')
+  var $player1Text         = $('.player1score span');
   var player1score        = $player1Text.val();
   var p1score             = Number(player1score);
-  var $player2Text         = $('.player1score span')
+  var $player2Text         = $('.player1score span');
   var player2score        = $player2Text.val();
   var p2score             = Number(player1score);
 
-
   //ball
   var $ball               = $('#ball');
-  var ballSize            = 15;
+  var ballSize            = 7;
+  var ballCSSSize         = $ball.css({width: ballSize,height: ballSize});
   var ballMovementX       = 5;
   var ballMovementY       = 3;
-  var defaultBallMovement = 5;
+  var defaultBallMovement = 2.5;
   var ballLimitXMin       = gamescreenOrigin;
   var ballLimitXMax       = gamescreenWidth - ballSize;
   var ballLimitYMin       = gamescreenOrigin;
   var ballLimitYMax       = gamescreenHeight - ballSize;
   var ballLastContact     = '';
-  var accelX              = 2;
-  var accelY              = 4;
 
   //bricks
-  var brick               = $('.brick');
+  var $brick              = $('.brick');
   var amountOfBrick       = 0;
-
 
   //sounds
   var startMenuBGM;
@@ -77,9 +70,8 @@ $(document).ready(function() {
   // BRICKS
   //===================================
 
-  var generateBricks = function (player, brickTop, brickColor, bricksColumn, bricksRow) {
+  var generateBricks = function (player, brickTop, fullHeight, brickColor, bricksColumn, bricksRow) {
     var fullWidth         = 400;
-    var fullHeight        = brickTop + 120;
 
     var brickLeftDefault  = 20;
     var brickLeft         = brickLeftDefault;
@@ -111,14 +103,15 @@ $(document).ready(function() {
 
     }
 
-    detectCollision();
-
   }
 
   //===================================
   // COLLISION DETECTION
   //===================================
   var detectCollision = function () {
+
+    // NOTE1: we record ballLastContact = '$player1paddle' so the ball doesn't stuck on paddle.
+    // NOTE2: we record ballLastContact = '$gamescreen'; so the ball doesn't go through the paddle.
 
     //BOUNDARY COLLISION
     var positionBall  = $ball.position();
@@ -127,59 +120,13 @@ $(document).ready(function() {
     var ballLeft      = positionBall.left;
     var ballRight     = ballLeft + ballSize;
 
-    // // Left Gap
-    // if (ballLeft > ballLimitXMin) {
-    //   var gap = ballLeft - ballLimitXMin;
-
-    //   if (gap < Math.abs(ballMovementX)) {
-    //     ballMovementX = -gap;
-    //   } else {
-    //     ballMovementX = -ballMovementX;
-    //   }
-    // }
-
-    // // Right Gap
-    // if (ballLeft > ballLimitXMax) {
-    //   var gap = ballLimitXMax - ballLeft;
-
-    //   if (gap < Math.abs(ballMovementX)) {
-    //     ballMovementX = gap;
-    //   } else {
-    //     ballMovementX = ballMovementX;
-    //   }
-    // }
-
-    // // Top Gap
-    // if (ballTop > ballLimitYMin) {
-    //   var gap = ballTop - ballLimitYMin;
-
-    //   if (gap < Math.abs(ballMovementY)) {
-    //     ballMovementY = -gap;
-    //   } else {
-    //     ballMovementY = -ballMovementY;
-    //   }
-    // }
-
-    // // Bot Gap
-    // if (ballTop > ballLimitYMax) {
-    //   var gap = ballLimitYMax - ballTop;
-
-    //   if (gap < Math.abs(ballMovementY)) {
-    //     ballMovementY = gap;
-    //   } else {
-    //     ballMovementY = ballMovementY;
-    //   }
-    // }
-
-    // we record ballLastContact = '$player1paddle' so the ball doesn't stuck on paddle.
-    // we record ballLastContact = '$gamescreen'; so the ball doesn't go through the paddle.
     if (ballLeft <= ballLimitXMin || ballLeft >= ballLimitXMax) {
-      ballMovementX = -ballMovementX;
+      ballMovementX       = -ballMovementX;
       ballLastContact     = '$gamescreen';
     }
 
     if (ballTop <= ballLimitYMin || ballTop >= ballLimitYMax) {
-      ballMovementY = -ballMovementY;
+      ballMovementY       = -ballMovementY;
       ballLastContact     = '$gamescreen';
     }
 
@@ -199,8 +146,7 @@ $(document).ready(function() {
        && ballLastContact !== '$player1paddle'
       ) {
       ballMovementY       = -ballMovementY;
-      ballMovementX       = -ballMovementX;
-      ballLastContact     = '$player1paddle'
+      ballLastContact     = '$player1paddle';
     }
 
     //Collision with Player 2's paddle
@@ -218,48 +164,50 @@ $(document).ready(function() {
       && ballLastContact  !== '$player2paddle'
       ) {
       ballMovementY       = -ballMovementY;
-      ballMovementX       = -ballMovementX;
-      ballLastContact     = '$player2paddle'
+      ballLastContact     = '$player2paddle';
     }
 
 
     //BRICK COLLISION
+    //function doesn't recognized top after brick deleted???
 
-    //$('.brick.player1[data-class=33]');
+    /*$brick.each(function() {
+      for (var i=0; i<$brick.length; i++) {
+        var brick         = $('.brick[data-class='+i+']');
+        var brickPosition = brick.position();
+        var brickTop      = brickPosition.top;
+        var brickLeft     = brickPosition.left;
+        var brickBottom   = brickPosition.top + 16; //take Height value from generateBricks?
+        var brickRight    = brickPosition.left + 36.25; //take Width value from generateBricks?
 
-    brick.each(function() {
-      var brickPosition = brick.position();
-      var brickTop      = brickPosition.top;
-      var brickLeft     = brickPosition.left;
-      var brickBottom   = brick2position.top + brickHeight; //take Height value from generateBricks?
-      var brickRight    = brick2position.left + brickWidth; //take Width value from generateBricks?
+        if (ballBottom >= brickTop
+           && ballTop <= brickBottom
+           && ballRight >= brickLeft
+           && ballLeft <= brickRight
+          ) {
 
-      if (ballBottom >= brickTop
-         && balTop <= brickBottom
-         && ballRight >= brickLeft
-         && ballLeft <= brickRight
-        ) {
+            ballMovementY = -ballMovementY;
+            ballMovementX = -ballMovementX;
 
-          ballMovementY = -ballMovementY;
-          ballMovementX = -ballMovementX;
+            //remove that brick
+            brick.remove();
 
-          //remove player brick
-          brick.remove();
+            //add score to player
+            // $brick.class not appropriate
+            if ($brick.class = "player1") {
+              p2score +=10;
+              console.log(p1score);
 
-          //add score to player
-          if (brick.class = "player1") {
-            p2score +=10;
-            console.log(p1score);
+              $('.player1score span').text("0000" + p1score).slice(-4);
+            } else if ($brick.class = "player2") {
+              p1score +=10;
+              console.log(p1score);
 
-            $('.player1score span').text("0000" + p1score).slice(-4);
-          } else if (brick.class = "player2") {
-            p1score +=10;
-            console.log(p1score);
-
-            $('.player1score span').text("0000" + p1score).slice(-4);
+              $('.player1score span').text("0000" + p1score).slice(-4);
+          }
         }
       }
-    });
+    });*/
 
   };
 
@@ -322,23 +270,24 @@ $(document).ready(function() {
   //===================================
   // GAME STATES
   //===================================
-  //WINNER
-  //if playerXBricksArea is empty, playerY wins and go to game over
-  var winner = function() {
-    var maxP1Bricks = $('.brick.player1').length;
-    var maxP2Bricks = $('.brick.player2').length;
+  //PLAY
+  var gameloopPlay = function() {
+    gameloop = window.setInterval(function(){
+      moveBall();
+      movePlayer($player1paddle, movement1);
+      movePlayer($player2paddle, movement2);
+    }, 17);
+  }
 
-    if (maxP1Bricks === 0) {
-
-    } else if (maxP2Bricks === 0) {
-
-    }
-
-  };
+  //PAUSE
+  var gameloopPause = function() {
+    window.clearInterval(gameloop);
+  }
 
   //RESUME
-  var resumeGame = function() {
+  var resumeGame = function(e) {
     $menu.hide();
+    gameloopPlay();
   };
 
   //RESET
@@ -348,25 +297,43 @@ $(document).ready(function() {
     $player2Text.text('00000');
 
     //reset brick
+    $('.brick').remove();
 
     //reset ball position
+    $ball.css({top: '50%', left: '50%'});
 
     //reset paddle position
+    $player1paddle.css({top: 160,left: 180});
+    $player2paddle.css({bottom: 160, left: 180});
+  };
+
+
+  //WINNER
+  var winner = function() {
+    var maxP1Bricks = $('.brick.player1').length;
+    var maxP2Bricks = $('.brick.player2').length;
+
+    if (maxP1Bricks === 0) {
+      console.log('P2 WINS!');
+      resetGame();
+    } else if (maxP2Bricks === 0) {
+      console.log('P1 WINS!');
+      resetGame();
+    }
 
   };
 
   //MENU
   var bindInGameMenu = function () {
-    $(document).on('keypress', function(e) {
+    $(document).off('keypress').on('keypress', function(e) {
       if (e.keyCode == 32) {
+        gameloopPause();
         $startMenu.hide();
         $menu.toggle();
 
-        //pause functions TO DO: stop propagation?
+        $('#continue').off().on('click', resumeGame);
+        $('#quit').off().on('click', startMenu);
 
-        $('#continue').on('click', resumeGame);
-        $('#newGame').on('click', resetGame);
-        $('#quit').on('click', startMenu);
       }
     });
   }
@@ -429,25 +396,26 @@ $(document).ready(function() {
 
   //START GAME
   var startGame = function() {
+    resetGame();
     bindInGameMenu();
     bindMovementKeys();
-    generateBricks('player1', 40,'blue',8,5);
 
-    generateBricks('player2', 300,'yellow',8,5);
+    amountOfBrick       = 0;
+    generateBricks('player1', 40, 180,'blue',8,5);
+    generateBricks('player2', 430, 960, 'yellow',8,5);
 
-    gameloop = setInterval(function(){
-      moveBall();
-      movePlayer($player1paddle, movement1);
-      movePlayer($player2paddle, movement2);
-    }, 17);
+    $(document).off('click').one('click', gameloopPlay());
+
+    winner();
+
   };
 
   //START MENU
   var startMenu = function() {
     $menu.hide();
     $startMenu.show();
-    $startMenu.on('click', function() {
-      startGame(); //make only one start game run?
+    $startMenu.off('click').one('click', function() {
+      $(document).off('click').one('click', startGame());
       $startMenu.hide();
     });
   };

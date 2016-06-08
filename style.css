@@ -39,21 +39,21 @@ html, body {
 }
 
 #menu {
-  z-index: 2;
+  z-index: 4;
   padding-left: 4%;
-  padding-top: 35%;
+  padding-top: 45%;
   text-align: center;
-  background-color: rgba(0,0,0,.5);
+  background-color: rgba(0,0,0,.7);
   display: none;
   width: 96%;
-  height: 75.5%;
+  height: 68.5%;
 }
 
 #startMenu {
-  z-index: 1;
+  z-index: 3;
   padding-left: 4%;
   padding-top: 50%;
-  background-color: rgba(0,0,0,.5);
+  background-color: rgba(0,0,0,.7);
   text-align: center;
   width: 96%;
   height: 65.5%;
@@ -89,21 +89,9 @@ html, body {
   background-color: white;
 }
 
-.player1paddle {
-  top: 200px;
-}
-
-.player2paddle {
-  bottom: 200px;
-}
-
 #ball {
   border-radius: 100%;
   background-color: white;
-  width: 15px;
-  height: 15px;
-  top: 50%;
-  left: 20px;
-  z-index: 3;
+  z-index: 2;
 }
 
