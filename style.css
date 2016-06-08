@@ -13,6 +13,7 @@ html, body {
   border: 12px solid #33001b;
   position: relative;
   cursor: crosshair;
+  margin: 0 auto;
 }
 
 #gamescreen {
@@ -21,30 +22,20 @@ html, body {
   height: 100%;
 }
 
-#player1ui, #player2ui, #message, #paddle, #ball, .player1lives, .player2lives, #ball, #menu, .player1brick, .player2brick, #startMenu {
+.player1score, .player2score, #message, #paddle, #ball, .player1lives, .player2lives, #ball, #menu, #startMenu, .brick {
   position: absolute;
 }
 
 /* GAME UI */
-#player1ui, #player2ui {
+.player1score, .player2score {
+  text-align: center;
+  padding: 5px;
   width: 410px;
 }
 
-.player1score, .player1lives, .player2score, .player2lives {
-  display: inline-block;
-  padding: 5px;
-}
-
-.player1lives {
-  right: 12px;
-}
-
-#player2ui {
+.player2score {
   bottom: 2px;
-}
 
-.player2lives {
-  right: 12px;
 }
 
 #menu {
@@ -82,21 +73,12 @@ html, body {
 }
 
 /* GAME OBJECTS */
-#paddle, #ball, .player1brick, .player2brick {
+.brick {
+  box-shadow: 4px 5px 0 rgba(0,0,0,.15);
+}
+
+#paddle, #ball {
   box-shadow: 7px 7px 0 rgba(0,0,0,.15);
-}
-
-.player1brick {
-  width: 30px;
-  height: 10px;
-  background-color: yellow;
-}
-
-.player2brick {
-  width: 30px;
-  height: 10px;
-  left: 20%;
-  background-color: green;
 }
 
 #paddle {
@@ -122,5 +104,6 @@ html, body {
   height: 15px;
   top: 50%;
   left: 20px;
+  z-index: 3;
 }
 
