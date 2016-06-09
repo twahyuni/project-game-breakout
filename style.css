@@ -8,6 +8,7 @@ html, body {
 
 #container {
   background: linear-gradient(#ff0084, #33001b);
+  background-size: 100%;
   width: 400px;
   height: 570px;
   border: 12px solid #33001b;
@@ -75,6 +76,7 @@ html, body {
 /* GAME OBJECTS */
 .brick {
   box-shadow: 4px 5px 0 rgba(0,0,0,.15);
+  background: url('');
 }
 
 #paddle, #ball {
