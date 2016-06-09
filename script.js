@@ -455,8 +455,8 @@ $(document).ready(function() {
     $('#continue').show();
 
     amountOfBrick = 0;
-    generateBricks('player1', 40, 180,'yellow',8,5);
-    generateBricks('player2', 430, 960, 'yellow',8,5);
+    generateBricks('player1', 40, 180,'white',8,5);
+    generateBricks('player2', 430, 960, 'white',8,5);
 
     $(document).off('click').one('click', gameloopPlay());
 
