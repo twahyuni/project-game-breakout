@@ -1,11 +1,3 @@
-/*
-TO DO LIST (BY ORDER)
-Accelerator
-Refactor
-Add Sounds
-
-*/
-
 $(document).ready(function() {
 
   //===================================
@@ -19,6 +11,8 @@ $(document).ready(function() {
   var $menu               = $('#menu');
   var $gamescreen         = $('#gamescreen');
   var $startMenu          = $('#startMenu');
+  var $gameOver           = $('#gameOver');
+  var $gameOverText       = $('#gameOverText');
   var gamescreenOrigin    = 0;
   var gamescreenWidth     = 400;
   var gamescreenHeight    = 570;
@@ -35,23 +29,17 @@ $(document).ready(function() {
   var playerLimitXMax     = gamescreenWidth - playerPaddleWidth;
   var paddleMovement      = 10;
 
-  var player1           = {
+  var player1             = {
     movement: {right: false, left: false},
     scoreText: $('.player1score span'),
     score: 0,
   }
 
-
-  var player2           = {
+  var player2             = {
     movement: {right: false, left: false},
     scoreText: $('.player2score span'),
     score: 0,
   }
-
-  /*var player1score        = player1.scoreText.val();
-  var p1score             = Number(player1score);
-  var player2score        = player2.scoreText.val();
-  var p2score             = Number(player2score);*/
 
   //ball
   var $ball               = $('#ball');
@@ -59,9 +47,9 @@ $(document).ready(function() {
   var ballCSSSize         = $ball.css({width: ballSize,height: ballSize});
   var ballPosX            = '50%';
   var ballPosY            = '50%';
-  var ballMovementX       = 15;
-  var ballMovementY       = 13;
-  var defaultBallMovement = 15;
+  var ballMovementX       = 5;
+  var ballMovementY       = 3;
+  var defaultBallMovement = 5;
   var ballLimitXMin       = gamescreenOrigin;
   var ballLimitXMax       = gamescreenWidth - ballSize;
   var ballLimitYMin       = gamescreenOrigin;
@@ -73,13 +61,19 @@ $(document).ready(function() {
   var amountOfBrick       = 0;
   var brickHeightInput    = 0;
   var brickWidthInput     = 0;
+  var bricksRowInput      = 0;
+  var bricksColumnInput   = 0;
 
   //sounds
-  var startMenuBGM;
-  var gameOverBGM;
-  var gamePlay;
-  var bumpBrick;
-  var bumpElse;
+  var optionClick         = new buzz.sound( "sounds/Jingle_Win_Synth_03.mp3" );
+  var gamePlayBGM         = new buzz.sound( "sounds/8_bit_love.mp3" );
+  var bumpBrick           = new buzz.sound( "sounds/Beep1.wav" );
+  var bumpElse            = new buzz.sound( "sounds/Menu_Navigate_00.wav" );
+
+  gamePlayBGM.setVolume(70);
+
+  //winner
+  var winnerName          = "";
 
   //===================================
   // BRICKS
@@ -94,12 +88,14 @@ $(document).ready(function() {
     var brickMarginY      = 5;
 
     //Dynamically calculate brick's width and height
-    var brickWidth    = (fullWidth - (2*brickLeft) - ((bricksColumn-1)*brickMarginX))/bricksColumn;
-    var brickHeight   = (fullHeight - (2*brickTop) - ((bricksRow-1)*brickMarginY))/bricksRow;
+    var brickWidth        = (fullWidth - (2*brickLeft) - ((bricksColumn-1)*brickMarginX))/bricksColumn;
+    var brickHeight       = (fullHeight - (2*brickTop) - ((bricksRow-1)*brickMarginY))/bricksRow;
 
     //put the previous values to global variables
-    brickWidthInput     = brickWidth;
-    brickHeightInput    = brickHeight;
+    brickWidthInput       = brickWidth;
+    brickHeightInput      = brickHeight;
+    bricksRowInput        = bricksRow;
+    bricksColumnInput     = bricksColumn;
 
     for (var i=0; i<bricksRow; i++) {
       for (var j=0; j<bricksColumn; j++) {
@@ -122,7 +118,6 @@ $(document).ready(function() {
       brickLeft = brickLeftDefault;
 
     }
-
   }
 
   //===================================
@@ -145,28 +140,33 @@ $(document).ready(function() {
     var topGap        = Math.abs(ballTop - ballLimitYMin);
     var bottomGap     = Math.abs(ballLimitYMax - ballTop);
 
-
-    //refactor this gap please (1)
+    //check gap for boundary
     if (leftGap < Math.abs(ballMovementX) && leftGap !== 0) {
       ballMovementX       = -leftGap;
       ballLastContact     = '$gamescreen';
+      bumpElse.play();
     } else if (rightGap < Math.abs(ballMovementX) && rightGap !== 0) {
       ballMovementX       = rightGap;
       ballLastContact     = '$gamescreen';
+      bumpElse.play();
     } else if (ballLeft <= ballLimitXMin || ballLeft >= ballLimitXMax){
-      ballMovementX       = -ballMovementX;
+      ballMovementX       = - ballMovementX;
       ballLastContact     = '$gamescreen';
+      bumpElse.play();
     }
 
     if (topGap < Math.abs(ballMovementY) && topGap !== 0) {
       ballMovementY       = -topGap;
       ballLastContact     = '$gamescreen';
+      bumpElse.play();
     } else if (bottomGap < Math.abs(ballMovementY) && bottomGap !== 0) {
       ballMovementY       = bottomGap;
       ballLastContact     = '$gamescreen';
+      bumpElse.play();
     } else if (ballTop <= ballLimitYMin || ballTop >= ballLimitYMax) {
       ballMovementY       = -ballMovementY;
       ballLastContact     = '$gamescreen';
+      bumpElse.play();
     }
 
     //PADDLE COLLISSION
@@ -186,6 +186,7 @@ $(document).ready(function() {
       ) {
       ballMovementY       = -ballMovementY;
       ballLastContact     = '$player1paddle';
+      bumpElse.play();
     }
 
     //Collision with Player 2's paddle
@@ -204,56 +205,50 @@ $(document).ready(function() {
       ) {
       ballMovementY       = -ballMovementY;
       ballLastContact     = '$player2paddle';
+      bumpElse.play();
     }
 
     //BRICK COLLISION
-    var brickAreaIdentification = function (playerClass, opponentClass, scoreName) {
-      var $bricks = $(playerClass);
-      var bricksLength = $bricks.length;
+    var brickAreaIdentification = function (playerClass, opponentClass, player) {
+      var $bricks         = $(playerClass);
+      var bricksLength    = $bricks.length;
 
       $bricks.each(function(index, elem){
-        var $brick = $(elem);
+        var $brick        = $(elem);
         var brickPosition = $brick.position();
         var brickTop      = brickPosition.top;
         var brickLeft     = brickPosition.left;
         var brickBottom   = brickPosition.top + brickHeightInput;
         var brickRight    = brickPosition.left + brickWidthInput;
 
-        if (ballBottom >= brickTop
-        && ballTop <= brickBottom
-        && ballRight >= brickLeft
-        && ballLeft <= brickRight
-        && ballLastContact !== $brick) {
+        if (ballBottom    >= brickTop
+        && ballTop        <= brickBottom
+        && ballRight      >= brickLeft
+        && ballLeft       <= brickRight
+        && ballLastContact!== $brick) {
 
-          ballMovementY = -ballMovementY;
-          ballMovementX = -ballMovementX;
-          ballLastContact = $brick;
+        ballMovementY     = -ballMovementY;
+        ballMovementX     = -ballMovementX;
+        ballLastContact   = $brick;
 
-          //remove that brick
-          $brick.remove();
+        //remove that brick
+        $brick.remove();
+        bumpBrick.play();
 
-          // when bricksLength is 1 other player wins
-          if($bricks.length === 1) {
-            gameloopPause();
-            $('#continue').replaceWith('<h1>' + opponentClass.substring(1) + " wins! </h1>");
-            $menu.show();
-            $('#quit').off().on('click', startMenu);
+        //add score to player
+        player.score += 10;
+        $(opponentClass + 'score span').text("000" + player.score).slice(-4);
 
-          };
+        winner(playerClass,opponentClass);
 
-          //add score to player
-           scoreName += 10;
-           console.log(player1.score);
-
-          //$(opponentClass + 'score span').text("000" + scoreName).slice(-4);
         }
       })
     };
 
     if (ballTop < 145) {
-      brickAreaIdentification('.player1', '.player2', player2.score);
+      brickAreaIdentification('.player1', '.player2', player2);
     } else if (ballBottom > 425) {
-      brickAreaIdentification('.player2', '.player1', player1.score);
+      brickAreaIdentification('.player2', '.player1', player1);
     }
 
   };
@@ -263,8 +258,8 @@ $(document).ready(function() {
   //===================================
 
   var movePlayer = function ($playerPaddle, movement) {
-    var playerPosition = $playerPaddle.position();
-    var playerLeft  = playerPosition.left;
+    var playerPosition  = $playerPaddle.position();
+    var playerLeft      = playerPosition.left;
 
     if (movement.left && playerLeft > playerLimitXMin) {
       // check gap so paddle doesn't go offscreen
@@ -317,6 +312,22 @@ $(document).ready(function() {
   //===================================
   // GAME STATES
   //===================================
+  //WINNER
+  var winner = function(playerClass, opponentClass) {
+    if($(playerClass).length === 0) {
+      gameloopPause();
+      $('#continue').hide();
+      winnerName = opponentClass.substring(1).toUpperCase();
+      $gameOverText.text(winnerName + ' wins!');
+      $gameOver.show();
+
+      $gameOver.on('click', function() {
+        optionClick.play();
+        startMenu();
+      });
+    }
+  }
+
   //PLAY
   var gameloopPlay = function() {
     gameloop = window.setInterval(function(){
@@ -332,7 +343,7 @@ $(document).ready(function() {
   };
 
   //RESUME
-  var resumeGame = function(e) {
+  var resumeGame = function() {
     $menu.hide();
     gameloopPlay();
   };
@@ -340,6 +351,8 @@ $(document).ready(function() {
   //RESET
   var resetGame = function() {
     //reset score
+    player1.score = 0;
+    player2.score = 0;
     player1.scoreText.text('00000');
     player2.scoreText.text('00000');
 
@@ -352,6 +365,7 @@ $(document).ready(function() {
     //reset paddle position
     $player1paddle.css({top: playerPaddlePosY,left: playerPaddlePosX});
     $player2paddle.css({bottom: playerPaddlePosY, left: playerPaddlePosX});
+
   };
 
   //MENU
@@ -360,10 +374,17 @@ $(document).ready(function() {
       if (e.keyCode == 32) {
         gameloopPause();
         $startMenu.hide();
+        $gameOver.hide();
         $menu.toggle();
 
-        $('#continue').off().on('click', resumeGame);
-        $('#quit').off().on('click', startMenu);
+        $('#continue').off().on('click', function() {
+          optionClick.play();
+          resumeGame();
+          });
+
+        $('#quit').off().on('click', function() {
+          startMenu();
+          });
 
       }
     });
@@ -431,6 +452,8 @@ $(document).ready(function() {
     bindInGameMenu();
     bindMovementKeys();
 
+    $('#continue').show();
+
     amountOfBrick = 0;
     generateBricks('player1', 40, 180,'yellow',8,5);
     generateBricks('player2', 430, 960, 'yellow',8,5);
@@ -441,10 +464,19 @@ $(document).ready(function() {
 
   //START MENU
   var startMenu = function() {
+    gamePlayBGM.loop().play();
+    $gameOver.hide();
     $menu.hide();
     $startMenu.show();
-    $startMenu.off('click').one('click', function() {
-      $(document).off('click').one('click', startGame());
+
+    //Animation
+    var animate = function pulse(){
+        $('#play').delay(200).fadeOut('slow').delay(50).fadeIn('slow',pulse);
+    }();
+
+    $startMenu.off('click').on('click', function() {
+      startGame();
+      optionClick.play();
       $startMenu.hide();
     });
   };

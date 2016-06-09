@@ -1,10 +1,11 @@
 # Project #1: Break Out Game
 
 ### Overview
-A Breakout game clone made with **HTML, CSS, Javascript (jQuery)**
+A Hybrid game clone between Breakout and Pong. Made with **HTML, CSS, Javascript (jQuery)** , without html canvas.
 
 ---
 ### Technical Challenges
+
 
 
 

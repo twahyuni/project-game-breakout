@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="style.css">
   <link href='https://fonts.googleapis.com/css?family=VT323' rel='stylesheet' type='text/css'>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/buzz/1.2.0/buzz.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src = "script.js" async></script>
 
@@ -18,7 +19,7 @@
   <div id="container">
     <!--GAME UI-->
     <div class="player1score">
-      P1 SCORE: <span>00000</span>
+      P1 SCORE: <span = "player1score">00000</span>
     </div>
 
     <div class="player2score">
@@ -40,6 +41,10 @@
     <div id="startMenu">
       <h1> PONG OUT </h1>
       <h2 id="play"> click to start </h2>
+    </div>
+
+    <div id="gameOver">
+      <h1 id="gameOverText">placeholder</h1>
     </div>
 
     <!--GAME OBJECTS-->

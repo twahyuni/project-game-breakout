@@ -7,6 +7,7 @@ html, body {
 }
 
 #container {
+  background-url:('');
   background: linear-gradient(#ff0084, #33001b);
   background-size: 100%;
   width: 400px;
@@ -23,7 +24,7 @@ html, body {
   height: 100%;
 }
 
-.player1score, .player2score, #message, #paddle, #ball, .player1lives, .player2lives, #ball, #menu, #startMenu, .brick {
+.player1score, .player2score, #paddle, #ball, .player1lives, .player2lives, #ball, #menu, #startMenu, .brick, #gameOver {
   position: absolute;
 }
 
@@ -50,7 +51,7 @@ html, body {
   height: 68.5%;
 }
 
-#startMenu {
+#startMenu, #gameOver {
   z-index: 3;
   padding-left: 4%;
   padding-top: 50%;
