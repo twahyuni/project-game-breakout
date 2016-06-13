@@ -56,20 +56,6 @@ $(document).ready(function() {
   var ballLimitYMax       = gamescreenHeight - ballSize;
   var ballLastContact     = '';
 
-  var ballXAxis = {
-    axis: ballMovementX,
-    side: $ball.position().left,
-    min: ballLimitXMin,
-    max: ballLimitXMax
-  }
-
-  var ballYAxis = {
-    axis: ballMovementY,
-    side: $ball.position().top,
-    min: ballLimitYMin,
-    max: ballLimitYMax
-  }
-
   //bricks
   var $brick              = $('.brick');
   var amountOfBrick       = 0;
@@ -154,6 +140,20 @@ $(document).ready(function() {
     var topGap        = Math.abs(ballTop - ballLimitYMin);
     var bottomGap     = Math.abs(ballLimitYMax - ballTop);
 
+    var ballXAxis = {
+      axis: ballMovementX,
+      side: $ball.position().left,
+      min: ballLimitXMin,
+      max: ballLimitXMax
+    }
+
+    var ballYAxis = {
+      axis: ballMovementY,
+      side: $ball.position().top,
+      min: ballLimitYMin,
+      max: ballLimitYMax
+    }
+
     //check gap for boundary
     /*var boundaryGap = function(directionGap, directionGapOpposite,ballAxis) {
       if (directionGap < Math.abs(ballAxis.axis) && directionGap !== 0) {
@@ -165,7 +165,7 @@ $(document).ready(function() {
         ballLastContact     = '$gamescreen';
         bumpElse.play();
       } else if (ballAxis.side <= ballAxis.min || ballAxis.side >= ballAxis.max) {
-        ballAxis.axis       = - ballAxis.axis;
+        ballAxis.axis       = -ballAxis.axis;
         ballLastContact     = '$gamescreen';
         bumpElse.play();
       }
@@ -173,7 +173,6 @@ $(document).ready(function() {
 
     boundaryGap(leftGap, rightGap, ballXAxis);
     boundaryGap(topGap, bottomGap, ballYAxis);*/
-
 
     if (leftGap < Math.abs(ballMovementX) && leftGap !== 0) {
       ballMovementX       = -leftGap;
@@ -209,21 +208,23 @@ $(document).ready(function() {
     var position1         = $player1paddle.position();
     var position2         = $player2paddle.position();
 
-    var positionP1 = {
-      paddle: '$player1paddle',
-      top: position1.top,
-      left: position1.left,
-      bottom:position1.top + playerPaddleHeight,
-      right: position1.left + playerPaddleWidth
-    };
+    var paddlePosition = {
+       p1: {
+        paddle: '$player1paddle',
+        top: position1.top,
+        left: position1.left,
+        bottom:position1.top + playerPaddleHeight,
+        right: position1.left + playerPaddleWidth
+      },
 
-    var positionP2 = {
-      paddle: '$player2paddle',
-      top: position2.top,
-      left: position2.left,
-      bottom: position2.top + playerPaddleHeight,
-      right: position2.left + playerPaddleWidth
-    };
+       p2: {
+        paddle: '$player2paddle',
+        top: position2.top,
+        left: position2.left,
+        bottom: position2.top + playerPaddleHeight,
+        right: position2.left + playerPaddleWidth
+      }
+    }
 
     var paddleCollission = function(position) {
       if (ballBottom        >= position.top
@@ -238,8 +239,8 @@ $(document).ready(function() {
       }
     };
 
-    paddleCollission(positionP1);
-    paddleCollission(positionP2);
+    paddleCollission(paddlePosition.p1);
+    paddleCollission(paddlePosition.p2);
 
     //BRICK COLLISION
     var brickAreaIdentification = function (playerClass, opponentClass, player) {
@@ -424,7 +425,7 @@ $(document).ready(function() {
   };
 
   //PADDLE KEY MOVEMENT
-   var bindMovementKey = function (keymode, state) {
+  var bindMovementKey = function (keymode, state) {
     $(document).on(keymode, function(e) {
       switch (e.keyCode) {
         case 37:
@@ -449,7 +450,7 @@ $(document).ready(function() {
   var bindMovementKeys = function() {
     bindMovementKey("keydown", true);
     bindMovementKey("keyup", false);
-  }
+  };
 
   //START "click to start" ANIMATION
   var animate = function pulse(){
