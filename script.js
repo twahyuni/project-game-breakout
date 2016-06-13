@@ -404,7 +404,7 @@ $(document).ready(function() {
   //MENU
   var bindInGameMenu = function () {
     $(document).off('keypress').on('keypress', function(e) {
-      if (e.keyCode == 32) {
+      if (e.keyCode === 32) {
         gameloopPause();
         $startMenu.hide();
         $gameOver.hide();
@@ -466,6 +466,11 @@ $(document).ready(function() {
     });
   };
 
+  //START "click to start" ANIMATION
+  var animate = function pulse(){
+    $('#play').delay(200).fadeOut('slow').delay(50).fadeIn('slow',pulse);
+  };
+
   //START GAME
   var startGame = function() {
     resetGame();
@@ -490,9 +495,7 @@ $(document).ready(function() {
     $startMenu.show();
 
     //Animation
-    var animate = function pulse(){
-        $('#play').delay(200).fadeOut('slow').delay(50).fadeIn('slow',pulse);
-    }();
+    animate();
 
     $startMenu.off('click').on('click', function() {
       startGame();
