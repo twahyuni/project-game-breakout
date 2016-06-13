@@ -430,26 +430,19 @@ $(document).ready(function() {
         case 37:
         player1.movement.left = true;
         break;
-      }
 
-      switch (e.keyCode) {
         case 39:
         player1.movement.right = true;
         break;
-      }
 
-      switch (e.keyCode) {
         case 90:
         player2.movement.left = true;
         break;
-      }
 
-      switch (e.keyCode) {
         case 88:
         player2.movement.right = true;
         break;
       }
-
     });
 
     $(document).on('keyup', function(e) {
@@ -457,21 +450,15 @@ $(document).ready(function() {
         case 37:
         player1.movement.left = false;
         break;
-      }
 
-      switch (e.keyCode) {
         case 39:
         player1.movement.right = false;
         break;
-      }
 
-      switch (e.keyCode) {
         case 90:
         player2.movement.left = false;
         break;
-      }
 
-      switch (e.keyCode) {
         case 88:
         player2.movement.right = false;
         break;
