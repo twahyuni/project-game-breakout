@@ -32,13 +32,13 @@ $(document).ready(function() {
   var player1             = {
     movement: {right: false, left: false},
     scoreText: $('.player1score span'),
-    score: 0,
+    score: 0
   }
 
   var player2             = {
     movement: {right: false, left: false},
     scoreText: $('.player2score span'),
-    score: 0,
+    score: 0
   }
 
   //ball
@@ -55,6 +55,20 @@ $(document).ready(function() {
   var ballLimitYMin       = gamescreenOrigin;
   var ballLimitYMax       = gamescreenHeight - ballSize;
   var ballLastContact     = '';
+
+  var ballXAxis = {
+    axis: ballMovementX,
+    side: $ball.position().left,
+    min: ballLimitXMin,
+    max: ballLimitXMax
+  }
+
+  var ballYAxis = {
+    axis: ballMovementY,
+    side: $ball.position().top,
+    min: ballLimitYMin,
+    max: ballLimitYMax
+  }
 
   //bricks
   var $brick              = $('.brick');
@@ -105,7 +119,7 @@ $(document).ready(function() {
           height: brickHeight,
           top: brickTop,
           left: brickLeft,
-          'background-color': brickColor,
+          'background-color': brickColor
         });
 
         $($newBrick).appendTo($('#gamescreen'));
@@ -141,6 +155,26 @@ $(document).ready(function() {
     var bottomGap     = Math.abs(ballLimitYMax - ballTop);
 
     //check gap for boundary
+    /*var boundaryGap = function(directionGap, directionGapOpposite,ballAxis) {
+      if (directionGap < Math.abs(ballAxis.axis) && directionGap !== 0) {
+        ballAxis.axis       = -directionGap;
+        ballLastContact     = '$gamescreen';
+        bumpElse.play();
+      } else if (directionGapOpposite < Math.abs(ballAxis.axis) && directionGapOpposite !== 0) {
+        ballAxis.axis       = directionGapOpposite;
+        ballLastContact     = '$gamescreen';
+        bumpElse.play();
+      } else if (ballAxis.side <= ballAxis.min || ballAxis.side >= ballAxis.max) {
+        ballAxis.axis       = - ballAxis.axis;
+        ballLastContact     = '$gamescreen';
+        bumpElse.play();
+      }
+    };
+
+    boundaryGap(leftGap, rightGap, ballXAxis);
+    boundaryGap(topGap, bottomGap, ballYAxis);*/
+
+
     if (leftGap < Math.abs(ballMovementX) && leftGap !== 0) {
       ballMovementX       = -leftGap;
       ballLastContact     = '$gamescreen';
@@ -169,44 +203,43 @@ $(document).ready(function() {
       bumpElse.play();
     }
 
+
     //PADDLE COLLISSION
-    //Collision with Player 1's paddle
+    //Collision with Player 1's and Player 2's paddle
     var position1         = $player1paddle.position();
-
-    var position1top      = position1.top;
-    var position1left     = position1.left;
-    var position1bottom   = position1.top + playerPaddleHeight;
-    var position1right    = position1.left + playerPaddleWidth;
-
-    if (ballBottom        >= position1top
-       && ballTop         <= position1bottom
-       && ballRight       >= position1left
-       && ballLeft        <= position1right
-       && ballLastContact !== '$player1paddle'
-      ) {
-      ballMovementY       = -ballMovementY;
-      ballLastContact     = '$player1paddle';
-      bumpElse.play();
-    }
-
-    //Collision with Player 2's paddle
     var position2         = $player2paddle.position();
 
-    var position2top      = position2.top;
-    var position2left     = position2.left;
-    var position2bottom   = position2.top + playerPaddleHeight;
-    var position2right    = position2.left + playerPaddleWidth;
+    var positionP1 = {
+      paddle: '$player1paddle',
+      top: position1.top,
+      left: position1.left,
+      bottom:position1.top + playerPaddleHeight,
+      right: position1.left + playerPaddleWidth
+    };
 
-    if (ballBottom        >= position2top
-       && ballTop         <= position2bottom
-       && ballRight       >= position2left
-       && ballLeft        <= position2right
-      && ballLastContact  !== '$player2paddle'
+    var positionP2 = {
+      paddle: '$player2paddle',
+      top: position2.top,
+      left: position2.left,
+      bottom: position2.top + playerPaddleHeight,
+      right: position2.left + playerPaddleWidth
+    };
+
+    var paddleCollission = function(position) {
+      if (ballBottom        >= position.top
+       && ballTop         <= position.bottom
+       && ballRight       >= position.left
+       && ballLeft        <= position.right
+       && ballLastContact  !== position.paddle
       ) {
       ballMovementY       = -ballMovementY;
-      ballLastContact     = '$player2paddle';
+      ballLastContact     = position.paddle
       bumpElse.play();
-    }
+      }
+    };
+
+    paddleCollission(positionP1);
+    paddleCollission(positionP2);
 
     //BRICK COLLISION
     var brickAreaIdentification = function (playerClass, opponentClass, player) {
@@ -263,10 +296,10 @@ $(document).ready(function() {
 
     if (movement.left && playerLeft > playerLimitXMin) {
       // check gap so paddle doesn't go offscreen
-      var gap = playerLeft - playerLimitXMin;
+      var gapMoveLeft = playerLeft - playerLimitXMin;
 
-      if (gap < paddleMovement) {
-        $playerPaddle.css({left: playerLeft - gap});
+      if (gapMoveLeft < paddleMovement) {
+        $playerPaddle.css({left: playerLeft - gapMoveLeft});
       } else {
         $playerPaddle.css({left: playerLeft - paddleMovement});
       }
@@ -274,10 +307,10 @@ $(document).ready(function() {
 
     if (movement.right && playerLeft < playerLimitXMax) {
       // check gap so paddle doesn't go offscreen
-      var gap = playerLimitXMax - playerLeft;
+      var gapMoveRight = playerLimitXMax - playerLeft;
 
-      if (gap < paddleMovement) {
-        $playerPaddle.css({left: playerLeft + gap});
+      if (gapMoveRight < paddleMovement) {
+        $playerPaddle.css({left: playerLeft + gapMoveRight});
       } else {
         $playerPaddle.css({left: playerLeft + paddleMovement});
       }
