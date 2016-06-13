@@ -424,47 +424,32 @@ $(document).ready(function() {
   };
 
   //PADDLE KEY MOVEMENT
-  var bindMovementKeys = function () {
-    $(document).on('keydown', function(e) {
+   var bindMovementKey = function (keymode, state) {
+    $(document).on(keymode, function(e) {
       switch (e.keyCode) {
         case 37:
-        player1.movement.left = true;
+        player1.movement.left = state;
         break;
 
         case 39:
-        player1.movement.right = true;
+        player1.movement.right = state;
         break;
 
         case 90:
-        player2.movement.left = true;
+        player2.movement.left = state;
         break;
 
         case 88:
-        player2.movement.right = true;
-        break;
-      }
-    });
-
-    $(document).on('keyup', function(e) {
-      switch (e.keyCode) {
-        case 37:
-        player1.movement.left = false;
-        break;
-
-        case 39:
-        player1.movement.right = false;
-        break;
-
-        case 90:
-        player2.movement.left = false;
-        break;
-
-        case 88:
-        player2.movement.right = false;
+        player2.movement.right = state;
         break;
       }
     });
   };
+
+  var bindMovementKeys = function() {
+    bindMovementKey("keydown", true);
+    bindMovementKey("keyup", false);
+  }
 
   //START "click to start" ANIMATION
   var animate = function pulse(){
